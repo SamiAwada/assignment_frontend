@@ -1,13 +1,14 @@
 import React from "react";
+import logo from "../../../logo.svg";
 import { NavLink } from "react-router-dom";
 export default function Header() {
   return (
-    <div className="container">
+    <div className=" container-fluid">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" to="/History">
-            Navbar
-          </a>
+        <div className=" container-fluid">
+          <NavLink className="navbar-brand" to="/History">
+            <img src={logo} className="App-logo" alt="logo" />
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"
@@ -23,7 +24,7 @@ export default function Header() {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <NavLink
-                  className="nav-link active"
+                  className="nav-link "
                   aria-current="page"
                   to="/Artists"
                 >

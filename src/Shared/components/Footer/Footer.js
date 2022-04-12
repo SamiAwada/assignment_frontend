@@ -2,61 +2,61 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="container my-5">
+    <div className=" container-fluid">
       <footer className="bg-dark text-center text-white">
-        <div className="container p-4 pb-0">
+        <div className=" container-fluid p-4 pb-0">
           <section className="mb-4">
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#3b5998" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-facebook-f"></i>
+              <i class="bi bi-facebook"></i>
             </a>
 
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#55acee" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-twitter"></i>
+              <i class="bi bi-twitter"></i>
             </a>
 
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#dd4b39" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-google"></i>
+              <i className="bi bi-google"></i>
             </a>
 
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#ac2bac" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-instagram"></i>
+              <i className="bi bi-instagram"></i>
             </a>
 
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#0082ca" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-linkedin-in"></i>
+              <i class="bi bi-linkedin"></i>
             </a>
             <a
-              className="btn btn-primary btn-floating m-1"
+              className="btn btn-primary btn-floating m-1 border-0"
               style={{ backgroundColor: "#333333" }}
               href="#!"
               role="button"
             >
-              <i className="fab fa-github"></i>
+              <i className="bi bi-github"></i>
             </a>
           </section>
         </div>
@@ -74,3 +74,4 @@ export default function Footer() {
     </div>
   );
 }
+// btn btn-primary btn-floating
