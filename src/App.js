@@ -1,13 +1,17 @@
 import './App.css';
-import MainLayout from './layouts/MainLayout';
-import Artist from "./pages/Artists";
-import searchHistory from './pages/searchHistory';
+import MainLayout from "./Layouts/MainLayout";
+import Artists from "./Pages/Artists";
+import History from "./Pages/History";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-      <div className="App">
-      <div>Hello</div>
+    <div className="App">
+      <MainLayout />
+      <Routes>
+        <Route path="/Artist" element={<Artists />} />
+        <Route path="/History" element={<History />} />
+      </Routes>
     </div>
   );
 }
