@@ -1,4 +1,5 @@
 import 'bootstrap/scss/bootstrap.scss'
+import "bootstrap-icons/font/bootstrap-icons.css";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
