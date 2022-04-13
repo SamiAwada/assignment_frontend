@@ -15,6 +15,7 @@ export default function Artists() {
             <input
               className={styles.searchInput}
               type={"text"}
+              onChange={(e) => handleSearch(e.target.value)}
               placeholder={"Search For Artists "}
             />
           </div>

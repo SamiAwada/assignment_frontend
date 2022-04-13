@@ -12,7 +12,7 @@ export default function Footer() {
               href="#!"
               role="button"
             >
-              <i class="bi bi-facebook"></i>
+              <i className="bi bi-facebook"></i>
             </a>
 
             <a
@@ -21,7 +21,7 @@ export default function Footer() {
               href="#!"
               role="button"
             >
-              <i class="bi bi-twitter"></i>
+              <i className="bi bi-twitter"></i>
             </a>
 
             <a
@@ -48,7 +48,7 @@ export default function Footer() {
               href="#!"
               role="button"
             >
-              <i class="bi bi-linkedin"></i>
+              <i className="bi bi-linkedin"></i>
             </a>
             <a
               className="btn btn-primary btn-floating m-1 border-0"
