@@ -70,7 +70,13 @@ export default function Artists() {
               </div>
             ) : (
               <div className={"" + styles.noCardsContainer}>
-                <h5>Just Search For an Artist</h5>
+                <div className={"" + styles.imgCont}>
+                  <img
+                    src={"/Assets/images/svg/musicSpin"}
+                    className={styles.waitlogo}
+                    alt="musicIcon"
+                  />
+                </div>
               </div>
             )}
           </div>
