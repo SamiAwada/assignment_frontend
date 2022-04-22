@@ -1,44 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../Assets/scss/ArtistsPage/ArtistsPage.module.scss";
 import searchIcon from "../Assets/images/svg/searchIcon.svg";
 import Pagination from "@mui/material/Pagination";
-import { useDebouncedCallback } from "use-debounce";
 import Divider from "../Shared/Utils/Divider";
 import Cards from "../Shared/components/Cards/Cards";
+import ArtistsChips from "../Shared/Utils/Chip";
+import { useDebounce } from "use-debounce";
+import axios from "../axios-instance";
 
-const demoData = [
-  {
-    userName: "Ahmad Hamdan",
-    Talent: "paino",
-    phoneNumber: "+961 71542313",
-  },
-  {
-    userName: "Khalil Tadara",
-    Talent: "Guitarist",
-    phoneNumber: "+961 71542313",
-  },
-  {
-    userName: "Jackson Berten",
-    Talent: "Singer",
-    phoneNumber: "+961 71542313",
-  },
+const demosearches = [
+  "Sami",
+  "Mahdi",
+  "Costa",
+  "Alex",
+  "Hassan",
+  "Hussein",
+  "Jack",
+  "Elena",
+  "Teya",
+  "Jessy",
+  "Bassel",
+  "Tony",
+  "Karen",
 ];
 
 export default function History() {
   const [artistsList, setartistsList] = useState(null);
+  const [pageValue, setPageValue] = useState(1);
+  const [count, setCount] = useState(1);
+  const [text, setText] = useState("");
+  const [searchText] = useDebounce(text, 600);
+  const [searchTextHistory, setSearchTextHistory] = useState(demosearches);
 
-  const handleSearch = useDebouncedCallback(
-    // function
-    (value) => {
-      console.log(value);
-      if (!value) {
+  useEffect(
+    () => {
+      const pageV = pageValue === 1 ? 0 : pageValue;
+      if (!searchText) {
         setartistsList(null);
       } else {
-        setartistsList(demoData);
+        axios
+          .get("/artists/uniquesearches?searchText=" + searchText)
+          .then((res) => {
+            console.log("res", res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
-    // delay in ms
-    500
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchText, pageValue]
   );
   return (
     <div className="container mt-3">
@@ -51,7 +62,7 @@ export default function History() {
             <input
               className={styles.searchInput}
               type={"text"}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => setText(e.target.value)}
               placeholder={"Search For Artists "}
             />
           </div>
@@ -62,6 +73,9 @@ export default function History() {
               <h4>Search History</h4>
             </div>
             <Divider />
+          </div>
+          <div className="mt-2 ms-3">
+            <ArtistsChips searchtexthistory={searchTextHistory} />
           </div>
           <div className={"d-flex flex-column flex-grow-1 mt-3"}>
             {artistsList ? (
@@ -81,7 +95,13 @@ export default function History() {
             )}
           </div>
           <div className="justify-self-end mx-auto mb-3">
-            <Pagination count={10} />
+            <Pagination
+              count={count}
+              defaultPage={1}
+              page={pageValue}
+              onChange={(event, newPage) => setPageValue(newPage)}
+              disabled={count === 1 ? true : false}
+            />
           </div>
         </div>
       </div>
