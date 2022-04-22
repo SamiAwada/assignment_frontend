@@ -1,45 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Assets/scss/ArtistsPage/ArtistsPage.module.scss";
 import searchIcon from "../Assets/images/svg/searchIcon.svg";
 import Pagination from "@mui/material/Pagination";
-import { useDebouncedCallback } from "use-debounce";
+import { useDebounce } from "use-debounce";
 import Divider from "../Shared/Utils/Divider";
 import Cards from "../Shared/components/Cards/Cards";
-
-const demoData = [
-  {
-    userName: "Ahmad Hamdan",
-    Talent: "paino",
-    phoneNumber: "+961 71542313",
-  },
-  {
-    userName: "Khalil Tadara",
-    Talent: "Guitarist",
-    phoneNumber: "+961 71542313",
-  },
-  {
-    userName: "Jackson Berten",
-    Talent: "Singer",
-    phoneNumber: "+961 71542313",
-  },
-];
+import axios from "../axios-instance";
 
 export default function Artists() {
   const [artistsList, setartistsList] = useState(null);
+  const [pageValue, setPageValue] = useState(1);
+  const [count, setCount] = useState(1);
+  const [text, setText] = useState("");
+  const [searchText] = useDebounce(text, 600);
 
-  const handleSearch = useDebouncedCallback(
-    // function
-    (value) => {
-      console.log(value);
-      if (!value) {
+  console.log("hello");
+  useEffect(
+    () => {
+      const pageV = pageValue === 1 ? 0 : pageValue;
+      if (!searchText) {
         setartistsList(null);
       } else {
-        setartistsList(demoData);
+        axios
+          .post("/artists", { searchText: `${searchText}`, PageValue: pageV })
+          .then((res) => {
+            setartistsList(res.data.artists);
+            setCount(Math.floor(res.data.total / 5));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
-    // delay in ms
-    500
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchText, pageValue]
   );
+
+  const handlePageChange = (event, newPage) => {
+    setPageValue(newPage);
+  };
   return (
     <div className="container mt-3">
       <div className={"d-flex flex-column " + styles.artistsMainBody}>
@@ -51,7 +50,7 @@ export default function Artists() {
             <input
               className={styles.searchInput}
               type={"text"}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => setText(e.target.value)}
               placeholder={"Search For Artists "}
             />
           </div>
@@ -81,7 +80,13 @@ export default function Artists() {
             )}
           </div>
           <div className="justify-self-end mx-auto mb-3">
-            <Pagination count={10} />
+            <Pagination
+              count={count}
+              defaultPage={1}
+              page={pageValue}
+              onChange={handlePageChange}
+              disabled={count === 1 ? true : false}
+            />
           </div>
         </div>
       </div>
