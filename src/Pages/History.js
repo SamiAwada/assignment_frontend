@@ -8,40 +8,32 @@ import ArtistsChips from "../Shared/Utils/Chip";
 import { useDebounce } from "use-debounce";
 import axios from "../axios-instance";
 
-const demosearches = [
-  "Sami",
-  "Mahdi",
-  "Costa",
-  "Alex",
-  "Hassan",
-  "Hussein",
-  "Jack",
-  "Elena",
-  "Teya",
-  "Jessy",
-  "Bassel",
-  "Tony",
-  "Karen",
-];
-
 export default function History() {
   const [artistsList, setartistsList] = useState(null);
   const [pageValue, setPageValue] = useState(1);
   const [count, setCount] = useState(1);
   const [text, setText] = useState("");
   const [searchText] = useDebounce(text, 600);
-  const [searchTextHistory, setSearchTextHistory] = useState(demosearches);
+  const [searchTextHistory, setSearchTextHistory] = useState(null);
 
   useEffect(
     () => {
-      const pageV = pageValue === 1 ? 0 : pageValue;
+      const pageV = pageValue - 1;
       if (!searchText) {
         setartistsList(null);
       } else {
         axios
-          .get("/artists/uniquesearches?searchText=" + searchText)
+          .get(
+            "/artists/uniquesearches?searchText=" +
+              searchText +
+              "&pagevalue=" +
+              pageV
+          )
           .then((res) => {
             console.log("res", res.data);
+            setSearchTextHistory(res.data[0].searches);
+            setartistsList(res.data[0].artists);
+            setCount(Math.floor(res.data[0].artistsnb / 5));
           })
           .catch((err) => {
             console.log(err);
@@ -75,7 +67,9 @@ export default function History() {
             <Divider />
           </div>
           <div className="mt-2 ms-3">
-            <ArtistsChips searchtexthistory={searchTextHistory} />
+            {searchTextHistory ? (
+              <ArtistsChips searchtexthistory={searchTextHistory} />
+            ) : null}
           </div>
           <div className={"d-flex flex-column flex-grow-1 mt-3"}>
             {artistsList ? (
