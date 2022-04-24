@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../Assets/scss/ArtistsPage/ArtistsPage.module.scss";
+import styles from "../Assets/scss/HistoryPage/HistoryPage.module.scss";
 import searchIcon from "../Assets/images/svg/searchIcon.svg";
 import Pagination from "@mui/material/Pagination";
 import Divider from "../Shared/Utils/Divider";
@@ -21,6 +21,7 @@ export default function History() {
       const pageV = pageValue - 1;
       if (!searchText) {
         setartistsList(null);
+        setSearchTextHistory(null);
       } else {
         axios
           .get(
@@ -43,20 +44,35 @@ export default function History() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchText, pageValue]
   );
+  const handleResetSearches = () => {
+    axios.get("/artists/searches").then((res) => {
+      setSearchTextHistory(res.data);
+    });
+  };
   return (
     <div className="container mt-3">
       <div className={"d-flex flex-column " + styles.artistsMainBody}>
-        <div className={"d-flex justify-content-start " + styles.searchBox}>
-          <div className={styles.searchDiv}>
-            <span>
-              <img src={searchIcon} alt="searchbar Icon" />
-            </span>
-            <input
-              className={styles.searchInput}
-              type={"text"}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={"Search For Artists "}
-            />
+        <div className="d-flex justify-content-between  ">
+          <div className={"d-flex justify-content-start " + styles.searchBox}>
+            <div className={styles.searchDiv}>
+              <span>
+                <img src={searchIcon} alt="searchbar Icon" />
+              </span>
+              <input
+                className={styles.searchInput}
+                type={"text"}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={"Search For Artists "}
+              />
+            </div>
+          </div>
+          <div>
+            <button
+              className="btn btn-primary b1"
+              onClick={handleResetSearches}
+            >
+              Reset Searches
+            </button>
           </div>
         </div>
         <div className={"d-flex flex-column  " + styles.artistsBox}>

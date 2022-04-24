@@ -41,3 +41,13 @@
     transform: rotate(360deg);
   }
 }
+
+.btn-primary.b1{
+  background-color: #1976d2 !important;
+  border-color: #1976d2 !important;
+  &:hover{
+            background-color: #0259b0 !important;
+            border-color: #0259b0 !important;
+
+  }
+}
