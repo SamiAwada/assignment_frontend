@@ -9,7 +9,11 @@ export default function ArtistsChips(props) {
         {props.searchtexthistory.map((searchText, i) => {
           return (
             <div className="ms-2 my-1" key={"searchText" + i}>
-              <Chip label={"" + searchText} clickable />
+              <Chip
+                label={"" + searchText}
+                onClick={() => props.clickedchip(searchText)}
+                clickable
+              />
             </div>
           );
         })}

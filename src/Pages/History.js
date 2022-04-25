@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../Assets/scss/HistoryPage/HistoryPage.module.scss";
 import searchIcon from "../Assets/images/svg/searchIcon.svg";
+import musicIcon from "../Assets/images/svg/musicSpin.svg";
 import Pagination from "@mui/material/Pagination";
 import Divider from "../Shared/Utils/Divider";
 import Cards from "../Shared/components/Cards/Cards";
@@ -13,8 +14,9 @@ export default function History() {
   const [pageValue, setPageValue] = useState(1);
   const [count, setCount] = useState(1);
   const [text, setText] = useState("");
-  const [searchText] = useDebounce(text, 600);
+  const [searchText, setSearchText] = useDebounce(text, 600);
   const [searchTextHistory, setSearchTextHistory] = useState(null);
+  const [recentSearches, setRecentSearches] = useState(null);
 
   useEffect(
     () => {
@@ -31,23 +33,39 @@ export default function History() {
               pageV
           )
           .then((res) => {
-            console.log("res", res.data);
-            setSearchTextHistory(res.data[0].searches);
-            setartistsList(res.data[0].artists);
-            setCount(Math.floor(res.data[0].artistsnb / 5));
+            if (res.data[0].searches) {
+              setSearchTextHistory(res.data[0].searches);
+              setartistsList(res.data[0].artists);
+              setCount(Math.floor(res.data[0].artistsnb / 5));
+            } else {
+              alert("Something Went Wrong! \n " + res.data);
+            }
           })
           .catch((err) => {
-            console.log(err);
+            alert(err);
           });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchText, pageValue]
   );
+  useEffect(() => {
+    axios
+      .get("/artists/searches")
+      .then((res) => {
+        if (res.data.error_msg) {
+          alert(res.data.error_msg);
+        } else setRecentSearches(res.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
   const handleResetSearches = () => {
-    axios.get("/artists/searches").then((res) => {
-      setSearchTextHistory(res.data);
-    });
+    setSearchTextHistory(recentSearches);
+  };
+  const handleClickedChip = (e) => {
+    setText(e);
   };
   return (
     <div className="container mt-3">
@@ -61,6 +79,7 @@ export default function History() {
               <input
                 className={styles.searchInput}
                 type={"text"}
+                value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder={"Search For Artists "}
               />
@@ -84,7 +103,10 @@ export default function History() {
           </div>
           <div className="mt-2 ms-3">
             {searchTextHistory ? (
-              <ArtistsChips searchtexthistory={searchTextHistory} />
+              <ArtistsChips
+                searchtexthistory={searchTextHistory}
+                clickedchip={handleClickedChip}
+              />
             ) : null}
           </div>
           <div className={"d-flex flex-column flex-grow-1 mt-3"}>
@@ -96,7 +118,7 @@ export default function History() {
               <div className={"" + styles.noCardsContainer}>
                 <div className={"" + styles.imgCont}>
                   <img
-                    src={"/Assets/images/svg/musicSpin"}
+                    src={musicIcon}
                     className={styles.waitlogo}
                     alt="musicIcon"
                   />

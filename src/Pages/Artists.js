@@ -6,6 +6,7 @@ import { useDebounce } from "use-debounce";
 import Divider from "../Shared/Utils/Divider";
 import Cards from "../Shared/components/Cards/Cards";
 import axios from "../axios-instance";
+import musicIcon from "../Assets/images/svg/musicSpin.svg";
 
 export default function Artists() {
   const [artistsList, setartistsList] = useState(null);
@@ -14,7 +15,6 @@ export default function Artists() {
   const [text, setText] = useState("");
   const [searchText] = useDebounce(text, 600);
 
-  console.log("hello");
   useEffect(
     () => {
       const pageV = pageValue === 1 ? 0 : pageValue;
@@ -22,13 +22,22 @@ export default function Artists() {
         setartistsList(null);
       } else {
         axios
-          .post("/artists", { searchText: `${searchText}`, PageValue: pageV })
+          .get("/artists?searchText=" + searchText + "&PageValue=" + pageV)
           .then((res) => {
-            setartistsList(res.data.artists);
-            setCount(Math.floor(res.data.total / 5));
+            if (res.data.artists) {
+              setartistsList(res.data.artists);
+              setCount(Math.floor(res.data.total / 5));
+            } else {
+              const err = res.data;
+              if (err.error.code)
+                alert(
+                  err.error_msg + `\n` + err.error.code + `\n` + err.error.input
+                );
+              else alert(err.error_msg + `\n` + err.error);
+            }
           })
           .catch((err) => {
-            console.log(err);
+            alert("Something Went Wrong! \n can't get artists");
           });
       }
     },
@@ -71,7 +80,7 @@ export default function Artists() {
               <div className={"" + styles.noCardsContainer}>
                 <div className={"" + styles.imgCont}>
                   <img
-                    src={"/Assets/images/svg/musicSpin"}
+                    src={musicIcon}
                     className={styles.waitlogo}
                     alt="musicIcon"
                   />
